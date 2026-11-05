@@ -39,7 +39,7 @@
     <label for="n">Deine Nummer</label>
     <input id="n" inputmode="numeric" pattern="[0-9]*" placeholder="z. B. 17" maxlength="2">
     <label for="p">Dein Passwort</label>
-    <input id="p" type="text" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="z. B. abc 234" maxlength="8">
+    <input id="p" type="text" autocorrect="off" spellcheck="false" placeholder="z. B. ABC 234" maxlength="8" autocapitalize="characters" style="text-transform: uppercase">
     <div class="hint">Steht beides auf deiner Karte. Gross oder klein, mit oder ohne Lücke: egal.</div>
     <div class="err" id="err"></div>
     <button type="submit">Meine Dateien zeigen</button>
@@ -51,7 +51,7 @@
     <p><b>Ab Freitag, 13. November 2026, 10 Uhr</b> sind deine Dateien hier. Scanne den Code dann einfach nochmal.</p>
   </section>
 
-  <footer>Testseite · <a href="https://hankeharald.github.io/Zukunftstag2026/">hankeharald.github.io/Zukunftstag2026</a></footer>
+  <footer>Testseite · <a href="https://hankeharald.github.io/zt26/">hankeharald.github.io/zt26</a></footer>
 </main>
 <script>
 (function () {
@@ -61,7 +61,7 @@
   try { const saved = JSON.parse(localStorage.getItem('zt-card') || 'null'); if (saved) { n.value = saved.n; p.value = saved.p; } } catch (e) {}
   f.addEventListener('submit', ev => {
     ev.preventDefault(); err.style.display = 'none'; res.style.display = 'none';
-    const num = parseInt(n.value, 10), pw = p.value.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const num = parseInt(n.value, 10), pw = p.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
     if (!(num >= 1 && num <= 60)) { err.textContent = 'Die Nummer steht gross auf deiner Karte: eine Zahl zwischen 1 und 60.'; err.style.display = 'block'; return; }
     if (pw.length !== 6) { err.textContent = 'Das Passwort hat sechs Zeichen. Schau nochmal auf die Karte.'; err.style.display = 'block'; return; }
     // the final page decrypts the link here; the test page only shows the waiting message
