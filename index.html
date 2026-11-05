@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Zukunftstag 2026 · 3D-Team</title>
+<style>
+  :root { color-scheme: light dark; --ink: #1a1a1a; --paper: #ffffff; --muted: #6b6b6b; --line: #d9d9d9; --accent: #b0003c; --soft: #f4f4f4; }
+  @media (prefers-color-scheme: dark) { :root { --ink: #f2f2f2; --paper: #121212; --muted: #a0a0a0; --line: #333; --soft: #1e1e1e; } }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--paper); color: var(--ink); font: 17px/1.5 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  main { max-width: 26rem; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; padding-top: calc(2.5rem + env(safe-area-inset-top, 0px)); }
+  h1 { font-size: 1.6rem; line-height: 1.15; margin: 0 0 .25rem; }
+  .sub { color: var(--muted); margin: 0 0 1.75rem; }
+  .ok { border-left: 4px solid var(--accent); padding: .6rem .9rem; background: var(--soft); margin-bottom: 1.75rem; }
+  .ok b { display: block; }
+  .ok small { color: var(--muted); }
+  label { display: block; font-weight: 600; margin: 1rem 0 .35rem; }
+  input { width: 100%; font: inherit; font-size: 1.35rem; padding: .7rem .9rem; border: 1.5px solid var(--line); border-radius: .6rem; background: var(--paper); color: var(--ink); letter-spacing: .06em; }
+  input:focus { outline: 2px solid var(--accent); outline-offset: 2px; border-color: transparent; }
+  button { width: 100%; margin-top: 1.5rem; font: inherit; font-size: 1.1rem; font-weight: 700; padding: .9rem; border: 0; border-radius: .6rem; background: var(--accent); color: #fff; cursor: pointer; }
+  .hint { color: var(--muted); font-size: .9rem; margin-top: .35rem; }
+  .err { color: var(--accent); font-weight: 600; margin-top: .75rem; display: none; }
+  #result { display: none; margin-top: 2rem; padding: 1.25rem; border-radius: .8rem; background: var(--soft); }
+  #result h2 { margin: 0 0 .4rem; font-size: 1.25rem; }
+  #result p { margin: .4rem 0; }
+  footer { margin-top: 3rem; color: var(--muted); font-size: .85rem; }
+  footer a { color: inherit; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Zukunftstag 2026<br>3D-Team</h1>
+  <p class="sub">Dein Flug. Dein Raumschiff. Dein Film.</p>
+
+  <div class="ok"><b>Der Code funktioniert.</b><small id="stamp">Diese Seite ist eine Testseite und wird vor dem Zukunftstag ersetzt.</small></div>
+
+  <form id="f" autocomplete="off">
+    <label for="n">Deine Nummer</label>
+    <input id="n" inputmode="numeric" pattern="[0-9]*" placeholder="z. B. 17" maxlength="2">
+    <label for="p">Dein Passwort</label>
+    <input id="p" type="text" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="z. B. abc 234" maxlength="8">
+    <div class="hint">Steht beides auf deiner Karte. Gross oder klein, mit oder ohne Lücke: egal.</div>
+    <div class="err" id="err"></div>
+    <button type="submit">Meine Dateien zeigen</button>
+  </form>
+
+  <section id="result">
+    <h2>Noch am Kochen.</h2>
+    <p>Dein Flug ist aufgenommen, dein Raumschiff ist gebaut. Jetzt rechnet der Computer die Nacht durch.</p>
+    <p><b>Ab Freitag, 13. November 2026, 10 Uhr</b> sind deine Dateien hier. Scanne den Code dann einfach nochmal.</p>
+  </section>
+
+  <footer>Testseite · <a href="https://hankeharald.github.io/Zukunftstag2026/">hankeharald.github.io/Zukunftstag2026</a></footer>
+</main>
+<script>
+(function () {
+  const f = document.getElementById('f'), n = document.getElementById('n'), p = document.getElementById('p'), err = document.getElementById('err'), res = document.getElementById('result');
+  document.getElementById('stamp').textContent += ' Geladen: ' + new Date().toLocaleString('de-CH');
+  // a card that worked once is remembered on this phone
+  try { const saved = JSON.parse(localStorage.getItem('zt-card') || 'null'); if (saved) { n.value = saved.n; p.value = saved.p; } } catch (e) {}
+  f.addEventListener('submit', ev => {
+    ev.preventDefault(); err.style.display = 'none'; res.style.display = 'none';
+    const num = parseInt(n.value, 10), pw = p.value.toLowerCase().replace(/[^a-z0-9]/g, '');
+    if (!(num >= 1 && num <= 60)) { err.textContent = 'Die Nummer steht gross auf deiner Karte: eine Zahl zwischen 1 und 60.'; err.style.display = 'block'; return; }
+    if (pw.length !== 6) { err.textContent = 'Das Passwort hat sechs Zeichen. Schau nochmal auf die Karte.'; err.style.display = 'block'; return; }
+    // the final page decrypts the link here; the test page only shows the waiting message
+    try { localStorage.setItem('zt-card', JSON.stringify({ n: num, p: pw })); } catch (e) {}
+    res.style.display = 'block'; res.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+})();
+</script>
+</body>
+</html>
